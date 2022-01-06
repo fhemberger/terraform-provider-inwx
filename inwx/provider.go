@@ -27,6 +27,12 @@ func Provider() terraform.ResourceProvider {
 				DefaultFunc: schema.EnvDefaultFunc("INWX_TAN", nil),
 				Description: "TAN for account unlock.",
 			},
+			"totp-key": &schema.Schema{
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("INWX_TOTP_SECRET", nil),
+				Description: "Shared TOTP key for creating TANs.",
+			},
 			"sandbox": &schema.Schema{
 				Type:        schema.TypeBool,
 				Optional:    true,
@@ -48,6 +54,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		Username: d.Get("username").(string),
 		Password: d.Get("password").(string),
 		TAN:      d.Get("tan").(string),
+		TOTPKey:  d.Get("totp-key").(string),
 		Sandbox:  d.Get("sandbox").(bool),
 	}
 
